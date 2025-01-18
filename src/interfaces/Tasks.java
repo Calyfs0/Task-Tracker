@@ -18,4 +18,8 @@ public interface Tasks {
     List<Task> GetAllTasksInProgress();
 
     List<Task> GetAllUnstartedTasks();
+
+    Task GetTaskById(int id);
+
+    List<Task> GetTaskByName(String taskName);
 }

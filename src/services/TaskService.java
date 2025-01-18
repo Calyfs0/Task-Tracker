@@ -87,6 +87,18 @@ public class TaskService implements Tasks {
         return AllUnstartedTasks;
     }
 
+    @Override
+    public Task GetTaskById(int id) {
+        // TODO Auto-generated method stub
+        throw new UnsupportedOperationException("Unimplemented method 'GetTaskById'");
+    }
+
+    @Override
+    public List<Task> GetTaskByName(String taskName) {
+        // TODO Auto-generated method stub
+        throw new UnsupportedOperationException("Unimplemented method 'GetTaskByName'");
+    }
+
     public static void CreateFileIfNotExist() throws IOException {
 
         boolean exists = Files.exists(JSON_PATH);
