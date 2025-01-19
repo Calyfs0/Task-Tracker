@@ -1,7 +1,5 @@
-package interfaces;
 
 import java.util.List;
-import models.Task;
 
 public interface Tasks {
 

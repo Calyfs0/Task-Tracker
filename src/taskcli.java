@@ -1,4 +1,5 @@
-import services.TaskService;
+import java.util.Arrays;
+import java.util.List;
 
 public class taskcli {
 
@@ -35,19 +36,31 @@ public class taskcli {
          * 
          */
 
-        if (args.length == 0) {
-            System.out.println("Please check the command list from README.md");
-            return;
-        }
+        // if (args.length == 0) {
+        // System.out.println("Please check the command list from README.md");
+        // return;
+        // }
 
-        String input = args[0];
-        System.out.println(input);
-        System.out.println(args[1]);
+        // String input = args[0];
+        String input = "list";
+
         switch (input) {
             case INPUT_ADD: {
-                String output = ts.Add(args[1].toString());
+                String output = ts.Add("Learning Java");
                 System.out.println(output);
                 break;
+            }
+            case INPUT_LIST_TASKS: {
+                List<Task> allTasks = ts.GetAllTasks();
+                allTasks.forEach(item -> {
+                    System.out.println(
+                            "{ id: " + item.getId() +
+                                    ", description: " + item.getTaskDescription() +
+                                    ", status: " + item.getTaskStatus() +
+                                    ", created at: " + item.getCreateAt() +
+                                    ", updated at: " + item.getUpdatedAt() + " }");
+                });
+
             }
 
             default:

@@ -1,4 +1,3 @@
-package services;
 
 import java.io.IOException;
 import java.nio.file.Files;
@@ -10,13 +9,10 @@ import java.util.List;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
-import interfaces.Tasks;
-import models.Task;
-
 public class TaskService implements Tasks {
 
     static final Path JSON_PATH = Path
-            .of("tasks.json");
+            .of("src/tasks.json");
 
     @Override
     public String Add(String input) {
@@ -37,23 +33,22 @@ public class TaskService implements Tasks {
 
     @Override
     public String Update(int id) {
-        // TODO Auto-generated method stub
         throw new UnsupportedOperationException("Unimplemented method 'Update'");
     }
 
     @Override
     public String Delete(int id) {
-        // TODO Auto-generated method stub
         throw new UnsupportedOperationException("Unimplemented method 'Delete'");
     }
 
     @Override
     public List<Task> GetAllTasks() {
         List<Task> AllTasks = new ArrayList<Task>();
-        if (!Files.exists(JSON_PATH)) {
-
+        if (Files.exists(JSON_PATH)) {
+            AllTasks = GetDataFromJSON();
         }
         return AllTasks;
+
     }
 
     @Override
@@ -88,13 +83,11 @@ public class TaskService implements Tasks {
 
     @Override
     public Task GetTaskById(int id) {
-        // TODO Auto-generated method stub
         throw new UnsupportedOperationException("Unimplemented method 'GetTaskById'");
     }
 
     @Override
     public List<Task> GetTaskByName(String taskName) {
-        // TODO Auto-generated method stub
         throw new UnsupportedOperationException("Unimplemented method 'GetTaskByName'");
     }
 
@@ -146,6 +139,56 @@ public class TaskService implements Tasks {
             id = Integer.parseInt(m.group(1));
         }
         return id;
+    }
+
+    public static List<Task> GetDataFromJSON() {
+        try {
+            List<Task> finalList = new ArrayList<>();
+            Task t = null;
+            String data = Files.readString(JSON_PATH);
+            data = data.substring(data.indexOf("["), data.indexOf("]") + 1);
+            data = data.replace("[", "").replace("]", "").replace("{", "").replace("},", "#").replace("}", "");
+            String[] dataList = data.split("#");
+            for (String s : dataList) {
+                s = s.replace("\"", "");
+                String[] d = s.split(",");
+                t = new Task();
+                for (String dd : d) {
+                    String[] taskData = dd.split(":");
+
+                    switch (taskData[0]) {
+                        case "id":
+                            t.setId(Integer.parseInt(taskData[1]));
+                            break;
+                        case "description":
+                            t.setTaskDescription(taskData[1]);
+                            break;
+                        case "status":
+                            t.setTaskStatus(taskData[1]);
+                            break;
+                        case "createdAt":
+                            t.setCreateAt(taskData[1]);
+                            break;
+                        case "updatedAt":
+                            t.setUpdatedAt(taskData[1]);
+                            finalList.add(t);
+                            break;
+                        default:
+                            break;
+
+                    }
+
+                }
+
+            }
+
+            return finalList;
+
+        } catch (Exception ex) {
+            System.out.println("Failed to get data" + ex.toString());
+            return null;
+        }
+
     }
 
 }
