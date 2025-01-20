@@ -1,11 +1,11 @@
 
 import java.util.List;
 
-public interface Tasks {
+public interface iTasks {
 
     String Add(String input);
 
-    String Update(int id);
+    void Update(int id, String updatedValue);
 
     String Delete(int id);
 

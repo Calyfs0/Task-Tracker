@@ -1,4 +1,3 @@
-import java.util.Arrays;
 import java.util.List;
 
 public class taskcli {
@@ -61,6 +60,19 @@ public class taskcli {
                                     ", updated at: " + item.getUpdatedAt() + " }");
                 });
 
+            }
+
+            case INPUT_UPDATE: {
+                ts.Update(1, "Buy groceries and cook dinner");
+                List<Task> allTasks = ts.GetAllTasks();
+                allTasks.forEach(item -> {
+                    System.out.println(
+                            "{ id: " + item.getId() +
+                                    ", description: " + item.getTaskDescription() +
+                                    ", status: " + item.getTaskStatus() +
+                                    ", created at: " + item.getCreateAt() +
+                                    ", updated at: " + item.getUpdatedAt() + " }");
+                });
             }
 
             default:
