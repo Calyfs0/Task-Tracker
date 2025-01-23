@@ -1,3 +1,4 @@
+import java.io.IOException;
 import java.nio.file.Files;
 import java.util.ArrayList;
 import java.util.List;
@@ -8,11 +9,10 @@ public class TaskService implements iTasks {
     public String Add(String input) {
         try {
             Utility.CreateFileIfNotExist();
+             String data = Files.readString(Utility.JSON_PATH);
+             System.out.println(data);
 
-            String data = Files.readString(Utility.JSON_PATH);
-            System.out.println(data);
-
-            Utility.CreateJSONFile(data, input);
+             Utility.CreateJSONFile(data, input);
 
             return "Successfully Added!";
         } catch (Exception ex) {
@@ -28,13 +28,51 @@ public class TaskService implements iTasks {
         for (Task t : AllTasks) {
             if (t.getId() == id) {
                 t.setTaskDescription(updatedValue);
+                break;
             }
+        }
+
+        try {
+            Files.delete(Utility.JSON_PATH);
+            Utility.CreateFileIfNotExist();
+            
+            int count = 0;
+            for (Task t : AllTasks) {
+                String data = Files.readString(Utility.JSON_PATH);
+                Utility.writeToFile(data, count, t);
+                count++;
+            }
+
+        } catch (IOException e) {
+            e.printStackTrace();
         }
     }
 
     @Override
-    public String Delete(int id) {
-        throw new UnsupportedOperationException("Unimplemented method 'Delete'");
+    public void Delete(int id) {
+        List<Task> AllTasks = GetAllTasks();
+
+        for (Task t : AllTasks) {
+            if (t.getId() == id) {
+                AllTasks.remove(t);
+                break;
+            }
+        }
+
+        try {
+            Files.delete(Utility.JSON_PATH);
+            Utility.CreateFileIfNotExist();
+            
+            int count = 0;
+            for (Task t : AllTasks) {
+                String data = Files.readString(Utility.JSON_PATH);
+                Utility.writeToFile(data, count, t);
+                count++;
+            }
+
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
     }
 
     @Override

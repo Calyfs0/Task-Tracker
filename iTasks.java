@@ -7,7 +7,7 @@ public interface iTasks {
 
     void Update(int id, String updatedValue);
 
-    String Delete(int id);
+    void Delete(int id);
 
     List<Task> GetAllTasks();
 
