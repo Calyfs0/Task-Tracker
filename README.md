@@ -4,14 +4,13 @@ Project details can be found on the below path:
 https://roadmap.sh/projects/task-tracker
 
 
-/*        
           1. Clone the project
           2. Run the command : javac taskcli.java
             Now you can run the below commands:
           CLI Commands
           # Adding a new task
           java taskcli add "Buy groceries"
-          # Output: Task added successfully (ID: 1)
+           Output: Task added successfully (ID: 1)
           
           # Updating and deleting tasks
           java taskcli update 1 "Buy groceries and cook dinner"
@@ -29,5 +28,5 @@ https://roadmap.sh/projects/task-tracker
           java taskcli list todo
           java taskcli list in-progress
           
-*/
+
 
