@@ -44,7 +44,7 @@ public class Utility {
             Task t = new Task();
             t.setId(count + 1);
             t.setTaskDescription(input);
-            t.setTaskStatus("todo");
+            t.setTaskStatus(Status.TODO.toString());
             t.setCreateAt(dtf.format(now));
             t.setUpdatedAt(dtf.format(now));
 
@@ -139,5 +139,22 @@ public class Utility {
             return null;
         }
 
+    }
+
+    public static void reCreateJSON(List<Task> AllTasks) {
+        try {
+            Files.delete(Utility.JSON_PATH);
+            Utility.CreateFileIfNotExist();
+            
+            int count = 0;
+            for (Task t : AllTasks) {
+                String data = Files.readString(Utility.JSON_PATH);
+                Utility.writeToFile(data, count, t);
+                count++;
+            }
+
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
     }
 }

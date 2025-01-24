@@ -1,3 +1,4 @@
+import java.util.ArrayList;
 import java.util.List;
 
 public class taskcli {
@@ -41,7 +42,7 @@ public class taskcli {
         // }
 
          String input = args[0];
-        //String input = "add";
+        //String input = "list";
 
         switch (input) {
             case INPUT_ADD: {
@@ -50,7 +51,27 @@ public class taskcli {
                 break;
             }
             case INPUT_LIST_TASKS: {
-                List<Task> allTasks = ts.GetAllTasks();
+                List<Task> allTasks = new ArrayList<>();
+                
+                if(args.length == 2){
+                    
+                    if(args[1].equals(Status.DONE.toString())){
+                        allTasks = ts.GetAllCompletedTasks();
+                    }
+                    else if(args[1].equals(Status.INPROGRESS.toString())){
+                        allTasks = ts.GetAllTasksInProgress();
+                    }
+                    else if(args[1].equals(Status.TODO.toString())){
+                        allTasks = ts.GetAllUnstartedTasks();
+                    }
+                    else{
+                        System.out.println("Please check the README.md file for commands.");
+                        return;
+                    }
+                }
+                else{
+                    allTasks = ts.GetAllTasks();
+                }
 
                 allTasks.forEach(item -> {
                     System.out.println(
@@ -93,9 +114,37 @@ public class taskcli {
                });
                break;
            }
+           
+           case INPUT_MARK_IN_PROGRESS:{
+                ts.MarkInProgress(Integer.parseInt(args[1]));
+                List<Task> allTasks = ts.GetAllTasks();
+               allTasks.forEach(item -> {
+                   System.out.println(
+                           "{ id: " + item.getId() +
+                                   ", description: " + item.getTaskDescription() +
+                                   ", status: " + item.getTaskStatus() +
+                                   ", created at: " + item.getCreateAt() +
+                                   ", updated at: " + item.getUpdatedAt() + " }");
+               });
+               break;
+           }
+
+           case INPUT_MARK_DONE:{
+            ts.MarkDone(Integer.parseInt(args[1]));
+            List<Task> allTasks = ts.GetAllTasks();
+           allTasks.forEach(item -> {
+               System.out.println(
+                       "{ id: " + item.getId() +
+                               ", description: " + item.getTaskDescription() +
+                               ", status: " + item.getTaskStatus() +
+                               ", created at: " + item.getCreateAt() +
+                               ", updated at: " + item.getUpdatedAt() + " }");
+           });
+           break;
+       }
 
             default:
-
+                System.out.println("Please check the README.md file for commands.");
                 break;
         }
     }

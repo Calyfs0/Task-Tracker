@@ -1,4 +1,3 @@
-import java.io.IOException;
 import java.nio.file.Files;
 import java.util.ArrayList;
 import java.util.List;
@@ -32,21 +31,10 @@ public class TaskService implements iTasks {
             }
         }
 
-        try {
-            Files.delete(Utility.JSON_PATH);
-            Utility.CreateFileIfNotExist();
-            
-            int count = 0;
-            for (Task t : AllTasks) {
-                String data = Files.readString(Utility.JSON_PATH);
-                Utility.writeToFile(data, count, t);
-                count++;
-            }
-
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
+        Utility.reCreateJSON(AllTasks);
     }
+
+    
 
     @Override
     public void Delete(int id) {
@@ -59,20 +47,7 @@ public class TaskService implements iTasks {
             }
         }
 
-        try {
-            Files.delete(Utility.JSON_PATH);
-            Utility.CreateFileIfNotExist();
-            
-            int count = 0;
-            for (Task t : AllTasks) {
-                String data = Files.readString(Utility.JSON_PATH);
-                Utility.writeToFile(data, count, t);
-                count++;
-            }
-
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
+        Utility.reCreateJSON(AllTasks);
     }
 
     @Override
@@ -89,8 +64,8 @@ public class TaskService implements iTasks {
     public List<Task> GetAllCompletedTasks() {
         List<Task> AllCompletedTasks = new ArrayList<Task>();
 
-        if (!Files.exists(Utility.JSON_PATH)) {
-
+        if (Files.exists(Utility.JSON_PATH)) {
+            AllCompletedTasks = GetAllTasks().stream().filter(task -> task.getTaskStatus().equals(Status.DONE.toString())).toList();
         }
         return AllCompletedTasks;
     }
@@ -99,8 +74,8 @@ public class TaskService implements iTasks {
     public List<Task> GetAllTasksInProgress() {
         List<Task> AllTasksInProgress = new ArrayList<Task>();
 
-        if (!Files.exists(Utility.JSON_PATH)) {
-
+        if (Files.exists(Utility.JSON_PATH)) {
+            AllTasksInProgress = GetAllTasks().stream().filter(task -> task.getTaskStatus().equals(Status.INPROGRESS.toString())).toList();
         }
         return AllTasksInProgress;
     }
@@ -109,20 +84,40 @@ public class TaskService implements iTasks {
     public List<Task> GetAllUnstartedTasks() {
         List<Task> AllUnstartedTasks = new ArrayList<Task>();
 
-        if (!Files.exists(Utility.JSON_PATH)) {
-
+        if (Files.exists(Utility.JSON_PATH)) {
+            AllUnstartedTasks = GetAllTasks().stream().filter(task -> task.getTaskStatus().equals(Status.TODO.toString())).toList();
         }
         return AllUnstartedTasks;
     }
 
     @Override
-    public Task GetTaskById(int id) {
-        throw new UnsupportedOperationException("Unimplemented method 'GetTaskById'");
+    public void MarkDone(int id) {
+        List<Task> AllTasks = GetAllTasks();
+
+        for (Task t : AllTasks) {
+            if (t.getId() == id) {
+                t.setTaskStatus(Status.DONE.toString());
+                break;
+            }
+        }
+
+        Utility.reCreateJSON(AllTasks);
     }
 
     @Override
-    public List<Task> GetTaskByName(String taskName) {
-        throw new UnsupportedOperationException("Unimplemented method 'GetTaskByName'");
+    public void MarkInProgress(int id) {
+        List<Task> AllTasks = GetAllTasks();
+
+        for (Task t : AllTasks) {
+            if (t.getId() == id) {
+                t.setTaskStatus(Status.INPROGRESS.toString());
+                break;
+            }
+        }
+
+        Utility.reCreateJSON(AllTasks);
     }
+
+
 
 }

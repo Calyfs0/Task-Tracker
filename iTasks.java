@@ -9,6 +9,10 @@ public interface iTasks {
 
     void Delete(int id);
 
+    void MarkDone(int id);
+
+    void MarkInProgress(int id);
+
     List<Task> GetAllTasks();
 
     List<Task> GetAllCompletedTasks();
@@ -17,7 +21,5 @@ public interface iTasks {
 
     List<Task> GetAllUnstartedTasks();
 
-    Task GetTaskById(int id);
 
-    List<Task> GetTaskByName(String taskName);
 }
